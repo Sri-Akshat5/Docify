@@ -17,17 +17,17 @@ function Foreround() {
   return (
     <>
    
-    {token && (
+    {!token && (
         <div className="absolute z-10 flex flex-wrap gap-2 mt-18 mx-5 w-full max-w-[90%] ">
           <Card /> 
         </div>
     )}
       <div className="absolute w-full h-full bg-transparent left-0 top-0 flex justify-center items-end pb-6 sm:pb-10 text-amber-50 text-2xl">
      
-        {token ? (
+        {!token ? (
           path === "/" ? (<Textbox />) : path === "/upload" ? (<Uploadform />) : ("AI Coming Soon")  
         ) : (<LoginSignup />) }
-        {token ? (path === "/account" ? <Account /> : null) : null}
+        {!token ? (path === "/account" ? <Account /> : null) : null}
        
       </div>
 

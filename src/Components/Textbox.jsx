@@ -15,7 +15,7 @@ function Textbox() {
       <div className={`relative flex justify-center items-center w-full max-w-[600px] mx-auto h-16 sm:h-20 rounded-full bg-zinc-600 ${isClicked ? `shadow-zinc-600/20 shadow-lg`:``}`}>
         
         <input
-        disabled={!token}
+        disabled={token}
         onClick={handleClick}
           type="text"
           
