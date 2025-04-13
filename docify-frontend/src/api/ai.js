@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URI = "http://localhost:5000/api/ai";
+const API_URI = "https://docify-g95p.onrender.com/api/ai";
 
 export async function generateCardFromAI(prompt) {
     const token = localStorage.getItem("token");

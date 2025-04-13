@@ -1,4 +1,4 @@
-const API_URI = "http://localhost:5000/api/files";
+const API_URI = "https://docify-g95p.onrender.com/api/files";
 
 export async function uploadCardFile(file) {
   const formData = new FormData();
