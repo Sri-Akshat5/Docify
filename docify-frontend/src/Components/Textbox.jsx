@@ -2,21 +2,26 @@ import React, { useState } from 'react';
 import { RiSendPlaneFill } from "react-icons/ri";
 import { IoMdSend } from "react-icons/io";
 import { createCard } from '../api/card';
+import Loader from "./Loader";
 
 function Textbox({ onCardCreated }) {
    const [isClicked, setIsClicked] = useState(false);
    const [text, setText] = useState(""); 
    const token = localStorage.getItem('token');
+   const [loading, setLoading] = useState(false);
 
    const handleClick = async () => {
       setIsClicked(true);
+      setLoading(true);
+
       if (text.trim() !== "") {
          const result = await createCard(text);
          if(result.success && onCardCreated){
             onCardCreated(result.card);
+            setLoading(false);
+
          }
 
-         console.log("Message sent:", result);
          setText(""); 
       }
    };
@@ -29,6 +34,7 @@ function Textbox({ onCardCreated }) {
 
    return (
       <div className="px-4 z-50">
+          {loading && <Loader />}
          <div className={`relative flex justify-center items-center w-full max-w-[600px] mx-auto h-16 sm:h-20 rounded-full bg-zinc-600 ${isClicked ? `shadow-zinc-600/20 shadow-lg` : ``}`}>
             <input
                disabled={!token}

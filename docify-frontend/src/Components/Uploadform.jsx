@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { IoMdSend } from "react-icons/io";
+import Loader from "./Loader";
 import { uploadCardFile } from '../api/upload';
 
 function Uploadform() {
   const [isClicked, setIsClicked] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
@@ -12,9 +14,11 @@ function Uploadform() {
 
   const handleUpload = async () => {
     if (!selectedFile) return;
+    setLoading(true);
     try {
       const data = await uploadCardFile(selectedFile);
       window.location.href = "/";
+      setLoading(false);
     } catch (err) {
       console.error("Upload failed:", err);
     }
@@ -33,6 +37,7 @@ function Uploadform() {
         required
         className="w-full outline-none text-zinc-400 px-4 py-2 sm:px-8 sm:py-4 bg-transparent text-lg sm:text-2xl cursor-pointer"
       />
+        {loading && <Loader />}
       <button
         onClick={function(){handleUpload(); handleClick();}}
         className="px-4 sm:px-8 text-xl sm:text-2xl text-zinc-900"

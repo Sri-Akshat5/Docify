@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../api/auth';
-
+import Loader from "./Loader";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await loginUser(email, password);
+    setLoading(true);
 
     setStatus(result.message);
 
@@ -19,7 +21,7 @@ function Login() {
       localStorage.setItem("token", result.token);
       window.location.href = "/";
       setTimeout(function(){
-        
+        setLoading(false);
       },2000);
     }
   };
@@ -29,7 +31,7 @@ function Login() {
   };
   return (
         <div className="absolute w-full h-full bg-zinc-600/70 left-0 top-0 flex justify-center items-end pb-6 sm:pb-10">
-          
+           {loading && <Loader />}
       <div className=" w-xl  px-8 py-6 bg-zinc-900 rounded-xl shadow-md">
       <div className='flex justify-end'>
            <button className='text-zinc-300 cursor-pointer hover:text-red-500' onClick={close}> x </button>
