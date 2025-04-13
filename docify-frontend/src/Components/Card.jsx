@@ -84,7 +84,7 @@ function Card({ title, description, id, onDelete, onEdit }) {
                     <FaFileDownload className="text-lg cursor-pointer hover:text-gray-300"  onClick={handleDownload}/>
                     <RiDeleteBinLine
                         className="text-lg cursor-pointer hover:text-red-500"
-                        onClick={function(){onDelete(id);  window.location.href = "/";}}
+                        onClick={() => onDelete(id)}
                     />
                 </div>
             </div>
