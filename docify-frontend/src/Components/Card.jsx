@@ -4,16 +4,36 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { FiEdit } from "react-icons/fi";
 import { FaFileDownload } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
+import Loader from "./Loader";
 
 function Card({ title, description, id, onDelete, onEdit }) {
     const [isEditing, setIsEditing] = useState(false);
     const [newTitle, setNewTitle] = useState(title);
     const [newDesc, setNewDesc] = useState(description);
+    const [loading, setLoading] = useState(false);
 
-    const handleSave = () => {
-        onEdit(id, newTitle, newDesc);
-        setIsEditing(false);
-        window.location.href = "/";
+    const handleSave = async () => {
+        setLoading(true);
+        try {
+            await onEdit(id, newTitle, newDesc);
+            setIsEditing(false);
+        } catch (error) {
+            console.error("Edit failed:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDelete = async () => {
+        setLoading(true);
+        try {
+            await onDelete(id);
+            window.location.href = "/";
+        } catch (error) {
+            console.error("Delete failed:", error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleDownload = () => {
@@ -25,11 +45,11 @@ function Card({ title, description, id, onDelete, onEdit }) {
                 <p>${newDesc}</p>
             </body>
             </html>`;
-    
+
         const blob = new Blob(['\ufeff', content], {
             type: 'application/msword',
         });
-    
+
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
         link.download = `${newTitle || "card"}.doc`;
@@ -37,7 +57,7 @@ function Card({ title, description, id, onDelete, onEdit }) {
         link.click();
         document.body.removeChild(link);
     };
-        
+
     return (
         <motion.div
             className="relative w-[200px] sm:w-[250px] h-[240px] sm:h-[260px] rounded-[20px] bg-zinc-800/90 text-white px-4 py-5 overflow-hidden shadow-lg cursor-grab active:cursor-grabbing"
@@ -48,9 +68,16 @@ function Card({ title, description, id, onDelete, onEdit }) {
             transition={{ duration: 0.5 }}
         >
            
+            {loading && (
+                <div className="absolute inset-0 bg-black/70 flex items-center justify-center rounded-[20px] z-50">
+                    <Loader />
+                </div>
+            )}
+
+           
             <IoDocumentTextOutline className="text-lg sm:text-xl" />
 
-            
+          
             <div className="mt-2">
                 {isEditing ? (
                     <>
@@ -62,7 +89,7 @@ function Card({ title, description, id, onDelete, onEdit }) {
                         <textarea
                             value={newDesc}
                             onChange={(e) => setNewDesc(e.target.value)}
-                            className="w-full px-1 text-sm bg-zinc-700 rounded "
+                            className="w-full px-1 text-sm bg-zinc-700 rounded"
                         />
                         <button onClick={handleSave} className="text-green-400 mt-1 text-xs cursor-pointer">
                             Save
@@ -81,14 +108,16 @@ function Card({ title, description, id, onDelete, onEdit }) {
                         className="text-lg cursor-pointer hover:text-green-300"
                         onClick={() => setIsEditing(!isEditing)}
                     />
-                    <FaFileDownload className="text-lg cursor-pointer hover:text-gray-300"  onClick={handleDownload}/>
+                    <FaFileDownload
+                        className="text-lg cursor-pointer hover:text-gray-300"
+                        onClick={handleDownload}
+                    />
                     <RiDeleteBinLine
                         className="text-lg cursor-pointer hover:text-red-500"
-                        onClick={() => onDelete(id)}
+                        onClick={handleDelete}
                     />
                 </div>
             </div>
-            
         </motion.div>
     );
 }
