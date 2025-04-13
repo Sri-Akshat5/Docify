@@ -4,8 +4,6 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { FiEdit } from "react-icons/fi";
 import { FaFileDownload } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
-import 'react-quill/dist/quill.snow.css';
-
 
 function Card({ title, description, id, onDelete, onEdit }) {
     const [isEditing, setIsEditing] = useState(false);
